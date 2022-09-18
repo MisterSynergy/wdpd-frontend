@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% set active_page = "/technical" %}
+{% block content %}
+      <h2>Technical edit patterns</h2>
+      <div class="figure_list">
+        <figure>
+          <figcaption>Unpatrolled actions per date</figcaption>
+          <img src="{{ url_for('static', filename='plots/actionsByDate.png') }}" alt="Unpatrolled actions per date">
+        </figure>
+        <figure>
+          <figcaption>Reverts per date</figcaption>
+          <img src="{{ url_for('static', filename='plots/revertedByDate.png') }}" alt="Reverts per date">
+        </figure>
+        <figure>
+          <figcaption>Unpatrolled revisions per QID bin</figcaption>
+          <img src="{{ url_for('static', filename='plots/qidBinRev.png') }}" alt="Unpatrolled revisions per QID bin">
+        </figure>
+        <figure>
+          <figcaption>Items with unpatrolled revisions per QID bin</figcaption>
+          <img src="{{ url_for('static', filename='plots/qidBinQid.png') }}" alt="Items with unpatrolled revisions per QID bin">
+        </figure>
+      </div>
+{% endblock content %}

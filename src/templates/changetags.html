@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% set active_page = "/changetags" %}
+{% block content %}
+      <h2>Change tags</h2>
+      <p>This is a list of all <a href="https://www.wikidata.org/wiki/Special:Tags" title="Change tags in Wikidata">change tags</a> used with unpatrolled changes in the past 30 days. The links under the change tags direct you to <a href="https://www.wikidata.org/wiki/Special:RecentChanges" title="RecentChanges on Wikidata">Special:RecentChanges</a> with the corresponding change tag selected as a filter.</p>
+      <p>Mind that not all of these change tags indicate a problem necessarily.</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>change tag</th>
+            <th>number used</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in data.itertuples() %}
+           <tr>
+             <td><a href="{{ tpl.rc_link }}" title="recent changes with change tag '{{ tpl.change_tag }}' on Wikidata" target="_blank">{{ tpl.change_tag }}</a></td>
+             <td>{{ tpl.cnt }}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endblock content %}

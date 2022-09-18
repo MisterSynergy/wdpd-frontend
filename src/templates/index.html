@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% set active_page = "/" %}
+{% block content %}
+      <h2>Last update</h2>
+      <p>Last update: {{ update }} (UTC). This report and content on all subpages is being updated twice per hour, roughly at the top and bottom of each hour.</p>
+      <h2>Patrol progress</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Overall progress</th>
+            <th>Today’s progress</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ progress }}</td>
+            <td>{{ today_progress }}</td>
+          </tr>
+          <tr>
+            <td><progress value="{{ progress_percent|round(1) }}" max="100" style="width:100%;">{{ progress_percent|round(1) }}%</progress></td>
+            <td><progress value="{{ today_progress_percent|round(1) }}" max="100" style="width:100%;">{{ today_progress_percent|round(1) }}%</progress></td>
+          </tr>
+        </tbody>
+      </table>
+      <figure class="centered">
+        <figcaption>Remaining unpatrolled changes by date</figcaption>
+        <img src="{{ url_for('static', filename='plots/remainingByDate.png') }}" alt="Remaining unpatrolled revisions per date">
+      </figure>
+{% endblock content %}

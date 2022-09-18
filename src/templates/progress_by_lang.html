@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% set active_page = "/progress_by_lang" %}
+{% block content %}
+      <form action="{{ url_for('progress_by_lang') }}" method="post">
+        <label for="lang">Language code</label>:&nbsp;
+        <select id="lang" name="lang">
+{% for lang in languages %}
+	      <option value="{{ lang }}"{% if lang==language %} selected="selected"{% endif %}>{{ lang }}</option>
+{% endfor %}
+        </select>
+        <input type="submit" value="select">
+      </form>
+{% if describe is not none %}
+      <h2>Statistical overview of the patrol delay for language code <span class="selector">{{ language }}</span></h2>
+      <p>“Patrol delay” is defined as the time between the edit and its patrol action.</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>statistical parameter</th>
+            <th>value</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in describe.itertuples() %}
+          <tr>
+            <td>{{ tpl.parameter }}</a></td>
+            <td>{% if tpl.parameter == 'count' %} {{ tpl.value|round|int }} {% else %}{{ tpl.value_formatted }}{% endif %}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endif %}
+{% if has_plot %}
+      <div class="figure_list">
+        <figure>
+          <figcaption>Patrol delay for language code <span class="selector">{{ language }}</span></figcaption>
+          <img src="{{ url_for('static', filename='plots/progress_by_lang/patrol-progress_' + language + '.png') }}" alt="Patrol progress statistics for language code '{{ language }}'">
+        </figure>
+{% if has_percentiles %}
+        <figure>
+          <figcaption>Patrol delay statistics for language code <span class="selector">{{ language }}</span></figcaption>
+          <img src="{{ url_for('static', filename='plots/progress_by_lang/patrol-progress-percentiles_' + language + '.png') }}" alt="Patrol progress statistics for language code '{{ language }}'">
+        </figure>
+{% endif %}
+      </div>
+{% endif %}
+{% if unpatrolled is not none and unpatrolled > 0 %}
+      <p><a href="/by_lang/{{ language }}" title="worklist for unpatrolled changes with language code '{{ language }}'">{{ unpatrolled }} revision{% if unpatrolled > 1 %}s{% endif %}</a> {% if unpatrolled > 1 %}are{% else %}is{% endif %} currently unpatrolled for language code <span class="selector">{{ language }}</span>.</p>
+{% endif %}
+{% if percentiles is not none %}
+      <!--<p>Percentiles: {{ percentiles }}</p>-->
+{% endif %}
+{% if top_patrollers is not none %}
+      <h2>Top patrollers for changes with language code <span class="selector">{{ language }}</span></h2>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>user</th>
+            <th>patrol actions</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in top_patrollers.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.patrol_log_link }}" target="_blank">{{ tpl.username }}</a></td>
+            <td>{{ tpl.actions }}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endif %}
+{% endblock content %}

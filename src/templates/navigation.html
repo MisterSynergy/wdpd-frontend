@@ -1,0 +1,96 @@
+{% set active_page = active_page|default('/') %}
+{% set nav_main = [
+  {
+    'text' : 'info',
+    'svgimg' : '<svg id="icon-info" class="menu-icon" viewbox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <circle id="icon-info-circle" cx="50" cy="50" r="38.69" />
+                  <g id="icon-info-group" aria-label="i">
+                    <path id="icon-info-path" d="m53.49 68.91h11.98v4.48h-30.95v-4.48h13.3v-25.15h-10.06v-4.48h15.73zm-6.3-36.25v-6.05h6.3v6.05z" />
+                  </g>
+                </svg>',
+    'submenu' : {
+      '/' : 'home',
+      '/patrol' : 'about patrol',
+      '/editsummaries' : 'magic edit summaries',
+      '/oresquality' : 'ORES model quality',
+      '/about' : 'about this tool'
+    }
+  },
+  {
+    'text' : 'statistics',
+    'svgimg' : '<svg id="icon-stat" class="menu-icon" viewbox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <path id="icon-stat-path" d="m12.14 88.51 24.33-33.5 14.71 22 30.55-62.13 6.19 7.9" />
+                </svg>',
+    'submenu' : {
+      '/temp' : 'temporal',
+      '/editorial' : 'editorial',
+      '/technical' : 'technical',
+      '/properties' : 'properties',
+      '/languages' : 'languages',
+      '/sitelinks' : 'sitelinks',
+      '/changetags' : 'change tags',
+      '/patrollers' : 'top patrollers'
+    }
+  },
+  {
+    'text' : 'items',
+    'svgimg' : '<svg id="icon-item" class="menu-icon" viewbox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <g id="icon-item-group" stroke-width="6" aria-label="Q">
+                    <path id="icon-item-path" d="m78.73 42.8q0 8.14-2.32 14.75-2.23 6.61-6.79 11.08-4.47 4.38-11.18 5.99l13.95 15.37h-7.33l-12.34-14.47q-0.71 0.1-1.34 0.1-0.62 0.1-1.34 0.1-9.65 0-16.09-4.11-6.34-4.2-9.56-11.62-3.13-7.51-3.13-17.25t3.22-17.07q3.31-7.33 9.74-11.44 6.53-4.202 16.09-4.202 9.21 0 15.46 4.022 6.35 3.93 9.66 11.26 3.3 7.33 3.3 17.52zm-52.02 0q0 8.49 2.51 14.93 2.5 6.34 7.68 9.92 5.19 3.49 13.14 3.49 8.05 0 13.14-3.49 5.19-3.58 7.6-9.92 2.5-6.35 2.5-14.93 0-13.23-5.81-20.65-5.72-7.5-17.16-7.5-7.95 0-13.23 3.57-5.27 3.49-7.86 9.83-2.51 6.35-2.51 14.75z"/>
+                  </g>
+                </svg>',
+    'submenu' : {
+      '/items' : 'with many unpatrolled revisions',
+      '/highuse' : 'highly used in Wikimedia projects',
+      '/rfdlinked' : 'linked from WD:RfD',
+      '/uncategorizable' : 'with uncategorizable edit summaries'
+    }
+  },
+  {
+    'text' : 'users',
+    'svgimg' : '<svg id="icon-user" class="menu-icon" viewbox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <g id="icon-user-group" transform="matrix(.921 0 0 .9235 185.1 .7862)">
+                    <circle id="icon-user-circle" cx="-146.7" cy="34.27" r="22.43" />
+                    <path id="icon-user-path" d="m-187.3 97.59a40.56 40.57 0 0 1 40.6-40.55 40.56 40.57 0 0 1 40.6 40.57" />
+                  </g>
+                </svg>',
+    'submenu' : {
+      '/by_time' : 'with many edits',
+      '/ores' : 'with high ORES scores',
+      '/creations' : 'with many item creations',
+      '/suggested' : 'suggested edit users'
+    }
+  },
+  {
+    'text' : 'filter',
+    'svgimg' : '<svg id="icon-funnel" class="menu-icon" viewbox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <path id="icon-funnel-path" d="m17.14 12.65h65.7l-26.3 25.8v45.24l-13.2-12.9v-32.34z" />
+                </svg>',
+    'submenu' : {
+      '/by_lang' : 'terms by language',
+      '/by_project' : 'sitelinks by project',
+      '/by_property' : 'claims by property (experimental)',
+      '/editentity' : 'complex edits by action (experimental)',
+      '/not_ns0' : 'edits outside main namespace'
+    }
+  }
+] %}
+      <nav id="nav-main">
+        <ul class="nav-menu">
+{% for dct in nav_main %}
+          <li class="nav-menu-li">
+            <a href="#" class="nav-menu-a{% if active_page in dct.submenu.keys() %} menu_active{% endif %}">
+              <div class="nav-menu-a-big">
+                {{ dct.svgimg|safe }}
+              </div>
+              <div class="nav-menu-a-small">{{ dct.text }}</div>
+            </a>
+            <ul class="nav-submenu">
+{% for href, linktext in dct.submenu.items() %}
+              <li><a href="{{ href }}"{% if href==active_page %} class="menu_active"{% endif %}>{{ linktext }}</a></li>
+{% endfor %}
+            </ul>
+          </li>
+{% endfor %}
+        </ul>
+      </nav>

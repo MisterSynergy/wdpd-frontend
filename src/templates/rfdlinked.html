@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% set active_page = "/rfdlinked" %}
+{% block content %}
+      <h2>Items linked from WD:RfD</h2>
+      <p>This list contains items with unpatrolled revisions that are linked from <a href="https://www.wikidata.org/wiki/Wikidata:Requests_for_deletions" title="Wikidata:Requests for deletions">Wikidata:Requests for deletions</a>. The deeplink to the WD:RfD page is merely a guess, and a listing on this page does not mean that the item is necessarily nominated for deletion—it might just be mentioned somewhere on that page.</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th colspan="2">item</th>
+            <th>label</th>
+            <th>del discussion (guessed)</th>
+            <th>unpatrolled revisions</th>
+            <th>patrol ratio</th>
+            <th>statements</th>
+            <th>identifiers</th>
+            <th>sitelinks</th>
+            <th>backlinks</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in data.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.item_link }}" title="item page for {{ tpl.item }}" target="_blank">{{ tpl.item }}</a></td>
+            <td><a href="{{ tpl.rev_history_link }}" title="revision history of item {{ tpl.item }}" target="_blank">hist</a></td>
+            <td>{{ tpl.label }}</td>
+            <td><a href="{{ tpl.rfd_deeplink }}" title="guessed location of WD:RfD discussion for item {{ tpl.item }}" target="_blank">WD:RfD disc</a></td>
+            <td>{{ tpl.unpatrolled }}</td>
+            <td>{{ tpl.patrol_ratio }}%</td>
+            <td>{{ tpl.statements }}</td>
+            <td>{{ tpl.identifiers }}</td>
+            <td>{{ tpl.sitelinks }}</td>
+            <td>{{ tpl.backlinks }}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+      <p>Total number of items: {{ line_cnt }}; total number of unpatrolled revisions in these items: {{ rev_cnt }}.</p>
+{% endblock content %}

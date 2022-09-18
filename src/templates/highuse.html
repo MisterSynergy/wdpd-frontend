@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% set active_page = "/highuse" %}
+{% block content %}
+      <h2>Top 50 “highly used items” with unpatrolled revisions</h2>
+      <p>This worklist shows so-called “highly used items” with unpatrolled revisions. The “number of uses” refers to the number of Wikimedia pages which in some way use data from the item.</p>
+      <p>These cases are best investigated in the Wikidata web user interface. For efficient patrolling, the <a href="https://www.wikidata.org/wiki/User:Mat%C4%9Bj_Such%C3%A1nek/patrolRevisions.js" title="patrolRevisions.js by User:Matěj Suchánek">patrolRevisions.js</a> user script can be used on item history pages.</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th colspan="2">item</th>
+            <th>number of uses</th>
+            <th>unpatrolled revisions</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in data.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.item_link }}" target="_blank">{{ tpl.item }}</a></td>
+            <td><a href="{{ tpl.rev_history_link }}" target="_blank">hist</a></td>
+            <td>{{ tpl.entity_usage }}</td>
+            <td>{{ tpl.unpatrolled }}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endblock content %}

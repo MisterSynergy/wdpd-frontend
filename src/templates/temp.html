@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% set active_page = "/temp" %}
+{% block content %}
+      <h2>Unpatrolled changes by editor type over time</h2>
+      <div class="figure_list">
+        <figure>
+          <figcaption>Unpatrolled edits per date</figcaption>
+          <img src="{{ url_for('static', filename='plots/editsByDate.png') }}" alt="Unpatrolled edits per date">
+        </figure>
+        <figure>
+          <figcaption>Unpatrolled edits per weekday</figcaption>
+          <img src="{{ url_for('static', filename='plots/editsByWeekday.png') }}" alt="Unpatrolled edits per weekday">
+        </figure>
+        <figure>
+          <figcaption>Unpatrolled edits per hour of day</figcaption>
+          <img src="{{ url_for('static', filename='plots/editsByHour.png') }}" alt="Unpatrolled edits per hour of day">
+        </figure>
+      </div>
+      <h2>Number of not-autoconfirmed editors over time</h2>
+      <div class="figure_list">
+        <figure>
+          <figcaption>Editor status per date</figcaption>
+          <img src="{{ url_for('static', filename='/plots/editorstatusByDate.png') }}" alt="Editor status per date">
+        </figure>
+        <figure>
+          <figcaption>Editor status per weekday</figcaption>
+          <img src="{{ url_for('static', filename='plots/editorstatusByWeekday.png') }}" alt="Editor status per weekday">
+        </figure>
+        <figure>
+          <figcaption>Editor status per hour of day</figcaption>
+          <img src="{{ url_for('static', filename='plots/editorstatusByHour.png') }}" alt="Editor status per hour of day">
+        </figure>
+      </div>
+      <h2>Patrol status over time</h2>
+      <div class="figure_list">
+        <figure>
+          <figcaption>Patrol status per date</figcaption>
+          <img src="{{ url_for('static', filename='plots/patrolstatusByDate.png') }}" alt="Patrol status per date">
+        </figure>
+        <figure>
+          <figcaption>Patrol status per weekday</figcaption>
+          <img src="{{ url_for('static', filename='plots/patrolstatusByWeekday.png') }}" alt="Patrol status per weekday">
+        </figure>
+        <figure>
+          <figcaption>Patrol status per hour of day</figcaption>
+          <img src="{{ url_for('static', filename='plots/patrolstatusByHour.png') }}" alt="Patrol status per hour of day">
+        </figure>
+      </div>
+{% endblock content %}
+
+
+

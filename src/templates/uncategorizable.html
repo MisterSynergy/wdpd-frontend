@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% set active_page = "/uncategorizable" %}
+{% block content %}
+      <h2>Uncategorizable edit summaries</h2>
+      <p>These edits have been made with an <a href="{{ url_for('edit_summaries') }}" title="magic edit summaries description">edit summary</a> that cannot be interpreted as a “magic edit summary” by this tool.</p>
+{% if data is not none %}
+      <table class="data">
+        <thead>
+          <tr>
+            <th>item</th>
+            <th>timestamp</th>
+            <th>diff</th>
+            <th>user</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in data.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.item_link }}" target="_blank">{{ tpl.item }}</a></td>
+            <td>{{ tpl.timestamp_formatted }}</td>
+            <td><a href="{{ tpl.diff_link }}" target="_blank">{{ tpl.rc_this_oldid }}</a></td>
+            <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.username }}</a></td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% else %}
+      <p>No such edits can currently be found.</p>
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% set active_page = "/editentity" %}
+{% block content %}
+      <form action="{{ url_for('editentity') }}" method="post">
+        <label for="action">Action</label>:&nbsp;
+        <select id="action" name="action">
+{% for act in actions %}
+	      <option value="{{ act }}"{% if act==action %} selected="selected"{% endif %}>{{ act }}</option>
+{% endfor %}
+        </select>
+        <input type="submit" value="select">
+      </form>
+{% if data is not none %}
+      <h2>Unpatrolled complex changes for <span class="selector">{{ action }}</span></h2>
+      <p>These are all unpatrolled changes of with an editsummary of <span class="selector">editentity</span> (<span class="selector">{{ action }}</span>).</p>
+      <p>ORES scores are highlighted here if above 0.9 (<span class="selector">ORES damaging</span>), or below 0.5 (<span class="selector">ORES goodfaith</span>).</p>
+      <p>This section is still highly experimental, thus the content might not be presented perfectly.</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>item</th>
+            <th colspan="2">action</th>
+            <th>timestamp</th>
+            <th>user</th>
+            <th>ORES damaging</th>
+            <th>ORES goodfaith</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in data.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.item_link }}" target="_blank">{{ tpl.item }}</a></td>
+            <td>{{ tpl.editsummary_magic_action }}</td>
+            <td></td>
+            <td>{{ tpl.timestamp_formatted }}</td>
+            <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.username }}</a></td>
+            <td{% if tpl.oresc_damaging > 0.9 %} class="ores_highlight"{% endif %}>{{ tpl.oresc_damaging }}</td>
+            <td{% if tpl.oresc_goodfaith < 0.5 %} class="ores_highlight"{% endif %}>{{ tpl.oresc_goodfaith }}</td>
+            <td><a href="{{ tpl.diff_link }}" target="_blank" class="button">patrol in Wikidata</a><!--{{ tpl.rc_this_oldid }}--></td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endif %}
+{% endblock content %}

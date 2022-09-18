@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% set active_page = "/languages" %}
+{% block content %}
+      <h2>Patrol status by language</h2>
+      <p>This list provides the patrol status grouped by language. It considers additions, modifications, or removals made on labels, descriptions, aliases, or all of them in a single language. It does not consider any language changes that were made due to item mergers, reverts, or complex edits (<span class="selector">editentity</span>; this includes item creations).</p>
+      <p>You can use these tools to filter the recent changes table for a given language code: <a href="https://pltools.toolforge.org/rech/" title="reCh by User:Pasleim" target="_blank">reCh</a> or <a href="https://wdvd.toolforge.org/index.php" title="Wikidata vandalism dashboard by User:Ladsgroup" target="_blank">Wikidata vandalism dashboard</a>.</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Language code</th>
+            <th>unpatrolled</th>
+            <th>patrolled</th>
+            <th>total</th>
+            <th>progress</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in data.itertuples() %}
+          <tr>
+            <td>{{ tpl.rank|round }}</td>
+            <td>{{ tpl.language }}</td>
+            <td>{{ tpl.unpatrolled }}</td>
+            <td>{{ tpl.patrolled }}</td>
+            <td>{{ tpl.total }}</td>
+            <td><progress value="{{ tpl.progress }}" max="100">{{ tpl.progress }}%</progress></td>
+            <td>{% if tpl.unpatrolled > 0 %}<a href="/by_lang/{{ tpl.language }}" title="patrol term modifications with language code '{{ tpl.language }}'" class="button">worklist</a>{% endif %}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endblock content %}

@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% set active_page = "/patrollers" %}
+{% block content %}
+      <h2>Top patrollers</h2>
+      <p>Overall patrol progress: {{ progress }}</p>
+      <p>This list contains the top 20 patrollers of the unpatrolled revisions of the past 30 days. Links go to the <a href="https://www.wikidata.org/wiki/Special:Log/patrol" title="Special:Log/patrol on Wikidata">patrol log</a> of the corresponding user.</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>user</th>
+            <th>patrols</th>
+            <th>fraction of all patrols</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in data.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.patrol_log_link }}" target="_blank">{{ tpl.username }}</a></td>
+            <td>{{ tpl.patrols }}</td>
+            <td>{{ tpl.patrols_relative|round(1) }}%</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endblock content %}

@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+{% set active_page = "/oresquality" %}
+{% block content %}
+      <h2>ORES model quality</h2>
+      <p><a href="https://www.mediawiki.org/wiki/ORES" alt="ORES at mediawiki.org">ORES</a> is a service to equip Wikidata edits with a probability score along a certain characteristic. The service is backed by a machine learning system that was trained to predict edit quality. Currently, two models are being used in Wikidata to rate edits, which are called “damaging” (edit quality) and “goodfaith” (user intent). This means that each edit has a score for each of these models. ORES scores range between 0 and 1. For the “damaging” model, higher values indicate a higher likeliness for a problematic edit; for the “goodfaith” model, lower values indicate a higher likeliness of a problematic edit.</p>
+      <p>The scores produced by the ORES service are primarily being used to filter problematic edits of unregistered editors and new editors, although edits by all experienced editors are being scored as well. In order to allow an interpretation of the scores produced by the ORES service, here are some plots, mostly histograms, being presented that should enable the reader to gain a deeper understanding of what to expect from this functionality. It is worth to mention that ORES scores are known to be not perfect, or sometimes even far away from being perfect. Some degree of false positive and false negative scores are inevitably resulting from this approach. As this is a machine learning model, it can only be as good as the initial training procedure was.</p>
+      <p>All plots on this page refer to edits by IP editors and newcomers without the “autoconfirmed” or “confirmed” rights within the past 30 days (“recent changes”). Older edits, and edits by experienced editors, are not being considered anywhere on this page.</p>
+      <p>There is an onwiki page about the ORES service at <a href="https://www.wikidata.org/wiki/Wikidata:ORES" alt="Wikidata:ORES">Wikidata:ORES</a>.</p>
+      <h3>Registered newcomers and unregistered editors</h3>
+      <div class="figure_list">
+        <figure>
+          <figcaption>ORES damaging scores by editor type (new registered vs. unregistered)</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-damagingAndEditorType.png') }}" alt="ORES damaging scores by editor type (new registered vs. unregistered)">
+        </figure>
+        <figure>
+          <figcaption>ORES goodfaith scores by editor type (new registered vs. unregistered)</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-goodfaithAndEditorType.png') }}" alt="ORES goodfaith scores by editor type (new registered vs. unregistered)">
+        </figure>
+      </div>
+      <p>The first important finding is that scores for edits by registered new accounts are fundamentally better than the ones for unregistered (IP) editors, in both ORES models. Thus, all subsequent plots have been produced for these two groups separately. On the left, plots for edits by registered newcomers are listed; on the right, the same evaluation has been made for unregistered editors.</p>
+      <h3>Model heatmaps</h3>
+      <p>These heatmaps display the distribution of ORES score pairs of both models in order to investigate correlations between the outcome of both models. In white regions, no edits can be found at all. The colorbar is scaled logarithmically.</p>
+      <p>Edits on the top left corner are least likely problematic (non damaging quality, good intent), edits on the bottom right corner are most likely problematic (damaging quality, bad intent). The bottom left corner is pretty empty due to the practical impossility of making bad faith, high quality edits, and in the top right corner there are low quality (damaging) edits with good intentions, which might indicate incompetence on the side of the editor.</p>
+      <div class="figure_list">
+        <figure>
+          <figcaption>ORES goodfaith vs. damaging heatmap for new registered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-heatmap-Registered.png') }}" alt="ORES goodfaith vs. damaging heatmap for new registered editors">
+        </figure>
+        <figure>
+          <figcaption>ORES goodfaith vs. damaging heatmap for unregistered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-heatmap-Anonymous.png') }}" alt="ORES goodfaith vs. damaging heatmap for unregistered editors">
+        </figure>
+      </div>
+      <h3>Action</h3>
+      <p>Edit actions are being grouped as described on the <a href="{{ url_for('edit_summaries') }}" alt="">magic edit summary page</a>.</p>
+      <div class="figure_list">
+        <figure>
+          <figcaption>ORES damaging scores by action for new registered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-damagingAndActionRegistered.png') }}" alt="ORES damaging scores by action for new registered editors">
+        </figure>
+        <figure>
+          <figcaption>ORES damaging scores by action for unregistered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-damagingAndActionAnonymous.png') }}" alt="ORES damaging scores by action for unregistered editors">
+        </figure>
+        <figure>
+          <figcaption>ORES goodfaith scores by action for new registered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-goodfaithAndActionRegistered.png') }}" alt="ORES goodfaith scores by action for new registered editors">
+        </figure>
+        <figure>
+          <figcaption>ORES goodfaith scores by action for unregistered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-goodfaithAndActionAnonymous.png') }}" alt="ORES goodfaith scores by action for unregistered editors">
+        </figure>
+      </div>
+      <h3>Reverted edits</h3>
+      <div class="figure_list">
+        <figure>
+          <figcaption>ORES damaging scores by revert status for new registered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-damagingAndRevertedRegistered.png') }}" alt="ORES damaging scores by revert status for new registered editors">
+        </figure>
+        <figure>
+          <figcaption>ORES damaging scores by revert status for unregistered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-damagingAndRevertedAnonymous.png') }}" alt="ORES damaging scores by revert status for unregistered editors">
+        </figure>
+        <figure>
+          <figcaption>ORES goodfaith scores by revert status for new registered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-goodfaithAndRevertedRegistered.png') }}" alt="ORES goodfaith scores by revert status for new registered editors">
+        </figure>
+        <figure>
+          <figcaption>ORES goodfaith scores by revert status for unregistered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-goodfaithAndRevertedAnonymous.png') }}" alt="ORES goodfaith scores by revert status for unregistered editors">
+        </figure>
+      </div>
+      <h3>Term types</h3>
+      <p>Edit actions are being grouped as described on the <a href="{{ url_for('edit_summaries') }}" alt="">magic edit summary page</a>.</p>
+      <div class="figure_list">
+        <figure>
+          <figcaption>ORES damaging scores by modified term type (label, description, alias) for new registered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-damagingAndTermtypeRegistered.png') }}" alt="ORES damaging scores by modified term type (label, description, alias) for new registered editors">
+        </figure>
+        <figure>
+          <figcaption>ORES damaging scores by modified term type (label, description, alias) for unregistered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-damagingAndTermtypeAnonymous.png') }}" alt="ORES damaging scores by modified term type (label, description, alias) for unregistered editors">
+        </figure>
+        <figure>
+          <figcaption>ORES goodfaith scores by modified term type (label, description, alias) for new registered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-goodfaithAndTermtypeRegistered.png') }}" alt="ORES goodfaith scores by modified term type (label, description, alias) for new registered editors">
+        </figure>
+        <figure>
+          <figcaption>ORES goodfaith scores by modified term type (label, description, alias) for unregistered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-goodfaithAndTermtypeAnonymous.png') }}" alt="ORES goodfaith scores by modified term type (label, description, alias) for unregistered editors">
+        </figure>
+      </div>
+      <h3>Languages</h3>
+      <p>These histograms consider the top 10 language codes in edits involving modifications of labels, descriptions, or aliases in the “terms” meta group (see <a href="{{ url_for('edit_summaries') }}">here</a>).</p>
+      <div class="figure_list">
+        <figure>
+          <figcaption>ORES damaging scores by language code for new registered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-damagingAndLanguageRegistered.png') }}" alt="ORES damaging scores by language code for new registered editors">
+        </figure>
+        <figure>
+          <figcaption>ORES damaging scores by language code for unregistered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-damagingAndLanguageAnonymous.png') }}" alt="ORES damaging scores by language code for unregistered editors">
+        </figure>
+        <figure>
+          <figcaption>ORES goodfaith scores by language code for new registered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-goodfaithAndLanguageRegistered.png') }}" alt="ORES goodfaith scores by language code for new registered editors">
+        </figure>
+        <figure>
+          <figcaption>ORES goodfaith scores by language code for unregistered editors</figcaption>
+          <img src="{{ url_for('static', filename='plots/ORES-hist-goodfaithAndLanguageAnonymous.png') }}" alt="ORES goodfaith scores by language code for unregistered editors">
+        </figure>
+      </div>
+{% endblock content %}
+
+
+

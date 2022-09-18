@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+{% set active_page = "/by_project" %}
+{% block content %}
+      <form action="{{ url_for('by_project') }}" method="post">
+        <label for="project">Wikimedia project</label>:&nbsp;
+        <select id="project" name="project">
+{% for proj in projects %}
+	      <option value="{{ proj }}"{% if proj==project %} selected="selected"{% endif %}>{{ proj }}</option>
+{% endfor %}
+        </select>
+        <input type="submit" value="select">
+      </form>
+{% if sitelinks is not none %}
+      <h2>Worklist: unpatrolled sitelink changes for <span class="selector">{{ project }}</span></h2>
+      <p>These are all unpatrolled changes of sitelinks to <span class="selector">{{ project }}</span>.</p>
+      <p>ORES scores are highlighted here if above 0.9 (<span class="selector">ORES damaging</span>), or below 0.5 (<span class="selector">ORES goodfaith</span>).</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>item</th>
+            <th colspan="2">action</th>
+            <th>timestamp</th>
+            <th>user</th>
+            <th>ORES damaging</th>
+            <th>ORES goodfaith</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in sitelinks.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.item_link }}" target="_blank">{{ tpl.item }}</a></td>
+            <td>{{ tpl.editsummary_magic_action }}</td>
+            <td></td>
+            <td>{{ tpl.timestamp_formatted }}</td>
+            <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.username }}</a></td>
+            <td{% if tpl.oresc_damaging > 0.9 %} class="ores_highlight"{% endif %}>{{ tpl.oresc_damaging }}</td>
+            <td{% if tpl.oresc_goodfaith < 0.5 %} class="ores_highlight"{% endif %}>{{ tpl.oresc_goodfaith }}</td>
+            <td><a href="{{ tpl.diff_link }}" target="_blank" class="button">patrol in Wikidata</a><!--{{ tpl.rc_this_oldid }}--></td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endif %}
+{% if pagemoves is not none %}
+      <h2>Unpatrolled page moves in <span class="selector">{{ project }}</span></h2>
+      <p>These are all unpatrolled changes of page moves triggered via <span class="selector">{{ project }}</span>. In most cases, these have been done by experienced Wikimedians, but it needs to be checked whether the moved page might have been repurposed meanwhile, e.g. by turning it into a disambiguation page that should be connected to another item.</p>
+      <p>ORES scores are highlighted here if above 0.9 (<span class="selector">ORES damaging</span>), or below 0.5 (<span class="selector">ORES goodfaith</span>).</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>item</th>
+            <th colspan="2">action</th>
+            <th>timestamp</th>
+            <th>user</th>
+            <th>ORES damaging</th>
+            <th>ORES goodfaith</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in pagemoves.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.item_link }}" target="_blank">{{ tpl.item }}</a></td>
+            <td>{{ tpl.editsummary_magic_action }}</td>
+            <td></td>
+            <td>{{ tpl.timestamp_formatted }}</td>
+            <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.username }}</a></td>
+            <td{% if tpl.oresc_damaging > 0.9 %} class="ores_highlight"{% endif %}>{{ tpl.oresc_damaging }}</td>
+            <td{% if tpl.oresc_goodfaith < 0.5 %} class="ores_highlight"{% endif %}>{{ tpl.oresc_goodfaith }}</td>
+            <td><a href="{{ tpl.diff_link }}" target="_blank" class="button">patrol in Wikidata</a><!--{{ tpl.rc_this_oldid }}--></td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endif %}
+{% if pageremovals is not none %}
+      <h2>Unpatrolled sitelink removals in <span class="selector">{{ project }}</span></h2>
+      <p>These are all unpatrolled sitelink removals triggered via <span class="selector">{{ project }}</span>. In most cases, these are page deletions performed by local project admins at are not yet autoconfirmed at Wikidata.</p>
+      <p>ORES scores are highlighted here if above 0.9 (<span class="selector">ORES damaging</span>), or below 0.5 (<span class="selector">ORES goodfaith</span>).</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>item</th>
+            <th colspan="2">action</th>
+            <th>timestamp</th>
+            <th>user</th>
+            <th>ORES damaging</th>
+            <th>ORES goodfaith</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in pageremovals.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.item_link }}" target="_blank">{{ tpl.item }}</a></td>
+            <td>{{ tpl.editsummary_magic_action }}</td>
+            <td></td>
+            <td>{{ tpl.timestamp_formatted }}</td>
+            <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.username }}</a></td>
+            <td{% if tpl.oresc_damaging > 0.9 %} class="ores_highlight"{% endif %}>{{ tpl.oresc_damaging }}</td>
+            <td{% if tpl.oresc_goodfaith < 0.5 %} class="ores_highlight"{% endif %}>{{ tpl.oresc_goodfaith }}</td>
+            <td><a href="{{ tpl.diff_link }}" target="_blank" class="button">patrol in Wikidata</a><!--{{ tpl.rc_this_oldid }}--></td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endif %}
+{% endblock content %}

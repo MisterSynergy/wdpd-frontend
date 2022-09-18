@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% set active_page = "/editorial" %}
+{% block content %}
+      <h2>Patrol progress by edit action</h2>
+      <div class="figure_list">
+        <figure class="broad">
+          <figcaption>Broad action per date</figcaption>
+          <img src="{{ url_for('static', filename='plots/broadActionByDate.png') }}" alt="Broad action per date">
+        </figure>
+        <figure>
+          <figcaption>Broad action by patrol status</figcaption>
+          <img src="{{ url_for('static', filename='plots/broadActionByPatrolStatus.png') }}" alt="Broad action by patrol status">
+        </figure>
+        <figure>
+          <figcaption>Other actions by patrol status</figcaption>
+          <img src="{{ url_for('static', filename='plots/otherActionsByPatrolStatus.png') }}" alt="Other actions by patrol status">
+        </figure>
+      </div>
+      <h2>Patrol progress by content</h2>
+      <div class="figure_list">
+        <figure>
+          <figcaption>Languages by patrol status; <a href="{{ url_for('languages') }}">full list</a></figcaption>
+          <img src="{{ url_for('static', filename='plots/languageByPatrolStatus.png') }}" alt="Languages by patrol status">
+        </figure>
+        <figure>
+          <figcaption>Properties by patrol status; <a href="{{ url_for('properties') }}">full list</a></figcaption>
+          <img src="{{ url_for('static', filename='plots/propertyByPatrolStatus.png') }}" alt="Properties by patrol status">
+        </figure>
+        <figure>
+          <figcaption>Sitelinks by patrol status; <a href="{{ url_for('sitelinks') }}">full list</a></figcaption>
+          <img src="{{ url_for('static', filename='plots/sitelinkByPatrolStatus.png') }}" alt="Sitelinks by patrol status">
+        </figure>
+      </div>
+{% endblock content %}

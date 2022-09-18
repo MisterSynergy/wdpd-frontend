@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+{% set active_page = "/by_lang" %}
+{% block content %}
+      <form action="{{ url_for('by_lang') }}" method="post">
+        <label for="lang">Language code</label>:&nbsp;
+        <select id="lang" name="lang">
+{% for lang in languages %}
+	      <option value="{{ lang }}"{% if lang==language %} selected="selected"{% endif %}>{{ lang }}</option>
+{% endfor %}
+        </select>
+        <input type="submit" value="select">
+      </form>
+{% if terms is not none %}
+      <h2>Unpatrolled terms with language code <span class="selector">{{ language }}</span></h2>
+      <p>These are all unpatrolled changes to terms with language code <span class="selector">{{ language }}</span> (labels, descriptions, aliases). This filter is also available in the <a href="https://pltools.toolforge.org/rech/" title="reCh tool">reCh tool</a>.</p>
+      <p>ORES scores are highlighted here if above 0.9 (<span class="selector">ORES damaging</span>), or below 0.5 (<span class="selector">ORES goodfaith</span>).</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>item</th>
+            <th colspan="2">action</th>
+            <th>timestamp</th>
+            <th>user</th>
+            <th>ORES damaging</th>
+            <th>ORES goodfaith</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in terms.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.item_link }}" target="_blank">{{ tpl.item }}</a></td>
+            <td>{{ tpl.editsummary_magic_action }}</td>
+            <td></td>
+            <td>{{ tpl.timestamp_formatted }}</td>
+            <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.username }}</a></td>
+            <td{% if tpl.oresc_damaging > 0.9 %} class="ores_highlight"{% endif %}>{{ tpl.oresc_damaging }}</td>
+            <td{% if tpl.oresc_goodfaith < 0.5 %} class="ores_highlight"{% endif %}>{{ tpl.oresc_goodfaith }}</td>
+            <td><a href="{{ tpl.diff_link }}" target="_blank" class="button">patrol in Wikidata</a><!--{{ tpl.rc_this_oldid }}--></td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endif %}
+{% if termsee is not none %}
+      <h2>Changes to terms with language code <span class="selector">{{ language }}</span> via <span class="selector">editentity</span></h2>
+      <p>These are unpatrolled revisions where terms with language code <span class="selector">{{ language }}</span> (labels, descriptions, or aliases) have been modified via the <span class="selector">editentity</span> function. These are usually complex edits where terms in other languages might have been modified as well. They are not accessible via the <a href="https://pltools.toolforge.org/rech/" title="reCh tool">reCh tool</a> and thus listed here.</p>
+      <p>ORES scores are highlighted here if above 0.9 (<span class="selector">ORES damaging</span>), or below 0.5 (<span class="selector">ORES goodfaith</span>).</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>item</th>
+            <th colspan="2">action</th>
+            <th>timestamp</th>
+            <th>user</th>
+            <th>ORES damaging</th>
+            <th>ORES goodfaith</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in termsee.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.item_link }}" target="_blank">{{ tpl.item }}</a></td>
+            <td>{{ tpl.editsummary_magic_action }}</td>
+            <td></td>
+            <td>{{ tpl.timestamp_formatted }}</td>
+            <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.username }}</a></td>
+            <td{% if tpl.oresc_damaging > 0.9 %} class="ores_highlight"{% endif %}>{{ tpl.oresc_damaging }}</td>
+            <td{% if tpl.oresc_goodfaith < 0.5 %} class="ores_highlight"{% endif %}>{{ tpl.oresc_goodfaith }}</td>
+            <td><a href="{{ tpl.diff_link }}" target="_blank" class="button">patrol in Wikidata</a><!--{{ tpl.rc_this_oldid }}--></td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endif %}
+{% if termseec is not none %}
+      <h2>Item creations including terms with language code <span class="selector">{{ language }}</span> via <span class="selector">editentity</span></h2>
+      <p>These are unpatrolled revisions where items have been newly created including terms with language code <span class="selector">{{ language }}</span> (labels, descriptions, or aliases). These can be complex edits that are not accessible via the <a href="https://pltools.toolforge.org/rech/" title="reCh tool">reCh tool</a> and thus listed here.</p>
+      <p>ORES scores are highlighted here if above 0.9 (<span class="selector">ORES damaging</span>), or below 0.5 (<span class="selector">ORES goodfaith</span>).</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>item</th>
+            <th colspan="2">action</th>
+            <th>timestamp</th>
+            <th>user</th>
+            <th>ORES damaging</th>
+            <th>ORES goodfaith</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in termseec.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.item_link }}" target="_blank">{{ tpl.item }}</a></td>
+            <td>{{ tpl.editsummary_magic_action }}</td>
+            <td></td>
+            <td>{{ tpl.timestamp_formatted }}</td>
+            <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.username }}</a></td>
+            <td{% if tpl.oresc_damaging > 0.9 %} class="ores_highlight"{% endif %}>{{ tpl.oresc_damaging }}</td>
+            <td{% if tpl.oresc_goodfaith < 0.5 %} class="ores_highlight"{% endif %}>{{ tpl.oresc_goodfaith }}</td>
+            <td><a href="{{ tpl.diff_link }}" target="_blank" class="button">patrol in Wikidata</a><!--{{ tpl.rc_this_oldid }}--></td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endif %}
+{% endblock content %}

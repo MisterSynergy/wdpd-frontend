@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% set active_page = "/suggested" %}
+{% block content %}
+      <h2>Top 50 users of the <span class="selector">suggested edit</span> function in Wikimedia apps</h2>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>user</th>
+            <th>patrolled edits</th>
+            <th>unpatrolled edits</th>
+            <th>reverted</th>
+            <th>created</th>
+            <th>total edits</th>
+            <th>patrol ratio (%)</th>
+            <th>revert ratio (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in data.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.username }}</a></td>
+            <td>{{ tpl.patrolled }}</td>
+            <td>{{ tpl.unpatrolled }}</td>
+            <td>{{ tpl.reverted }}</td>
+            <td>{{ tpl.created }}</td>
+            <td>{{ tpl.total }}</td>
+            <td>{{ tpl.patrolled_ratio }}</td>
+            <td>{{ tpl.reverted_ratio }}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endblock content %}

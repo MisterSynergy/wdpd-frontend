@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% set active_page = "/by_time" %}
+{% block content %}
+      <table class="nav">
+        <tbody>
+          <tr>
+            <th>Select a timeframe:</th>
+{% for tf in [ 'today', '3d', '7d', '14d', 'all' ] %}
+            <td><a href="{{ url_for('by_time', timeframe=tf) }}" title="{{ tf }}"{% if timeframe==tf %} class="menu_active"{% endif %}>{{ tf }}</a></td>
+{% endfor %}
+          </tr>
+        </tbody>
+      </table>
+      <h2>Users with most unpatrolled edits {{ description }}</h2>
+      <p>These cases are best investigated in the Wikidata web user interface. For efficient patrolling, the <a href="https://www.wikidata.org/wiki/User:Mat%C4%9Bj_Such%C3%A1nek/patrolRevisions.js" title="patrolRevisions.js by User:Matěj Suchánek">patrolRevisions.js</a> user script can be used on user contribution pages.</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>user</th>
+            <th>patrolled edits</th>
+            <th>unpatrolled edits</th>
+            <th>reverted</th>
+            <th>created</th>
+            <th>total edits</th>
+            <th>patrol ratio (%)</th>
+            <th>revert ratio (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in data.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.username }}</a></td>
+            <td>{{ tpl.patrolled }}</td>
+            <td>{{ tpl.unpatrolled }}</td>
+            <td>{{ tpl.reverted }}</td>
+            <td>{{ tpl.created }}</td>
+            <td>{{ tpl.edits }}</td>
+            <td>{{ tpl.patrolled_ratio|round(1) }}</td>
+            <td>{{ tpl.reverted_ratio|round(1) }}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endblock content %}

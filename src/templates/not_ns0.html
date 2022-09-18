@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% set active_page = "/not_ns0" %}
+{% block content %}
+      <!--<form action="{{ url_for('not_ns0') }}" method="post">
+        <label for="namespace">Namespace</label>:&nbsp;
+        <select id="namespace" name="namespace">
+{% for ns in namespaces %}
+	      <option value="{{ ns }}"{% if ns==namespace %} selected="selected"{% endif %}>{{ ns }}</option>
+{% endfor %}
+        </select>
+        <input type="submit" value="select">
+      </form>-->
+      <table class="nav">
+        <tbody>
+          <tr>
+            <th>Namespace:</th>
+{% for ns in namespaces %}
+            <td><a href="{{ url_for('not_ns0', namespace=ns) }}" title="{{ ns }}"{% if ns==namespace %} class="menu_active"{% endif %}>{{ ns }}</a></td>
+{% endfor %}
+          </tr>
+        </tbody>
+      </table>
+{% if data is not none %}
+      <h2>Unpatrolled changes for namespace <span class="selector">{{ namespace }}</span></h2>
+{% if namespace == 'User talk' or namespace == 'Topic' %}
+      <p>Changes related to “Structured Discussion” (formerly known as “Flow”) boards are not shown here since they cannot be patrolled.</p>
+{% endif %}
+      <table class="data">
+        <thead>
+          <tr>
+            <th>page</th>
+            <th>new</th>
+            <th>timestamp</th>
+            <th>user</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in data.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.full_page_url }}" target="_blank">{{ tpl.full_page_title }}</a></td>
+            <td>{{ tpl.action }}</td>
+            <td>{{ tpl.timestamp_formatted }}</td>
+            <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.username }}</a></td>
+            <td><a href="{{ tpl.diff_link }}" target="_blank" class="button">patrol in Wikidata</a><!--{{ tpl.rc_this_oldid }}--></td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endif %}
+{% endblock content %}

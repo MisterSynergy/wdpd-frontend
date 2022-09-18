@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% set active_page = "/ores" %}
+{% block content %}
+      <h2>Unregistered users with high ORES damaging scores</h2>
+      <p>This worklist displays unregistered editors with high average <span class="selector">ORES damaging</span> scores over at least 10 unpatrolled edits.</p>
+      <p>These cases are best investigated in the Wikidata web user interface. For efficient patrolling, the <a href="https://www.wikidata.org/wiki/User:Mat%C4%9Bj_Such%C3%A1nek/patrolRevisions.js" title="patrolRevisions.js by User:Matěj Suchánek">patrolRevisions.js</a> user script can be used on user contribution pages.</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>user</th>
+            <th>considered edits</th>
+            <th>avg ORES score</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in unregistered.itertuples() %}
+           <tr>
+             <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.username }}</a></td>
+             <td>{{ tpl.unpatrolled }}</td>
+             <td>{{ tpl.ores_avg|round(3) }}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+      <h2>Registered users with high ORES damaging scores</h2>
+      <p>This worklist displays newcomers with high average <span class="selector">ORES damaging</span> scores over at least 10 unpatrolled edits.</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>user</th>
+            <th>considered edits</th>
+            <th>avg ORES score</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in registered.itertuples() %}
+           <tr>
+             <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.username }}</a></td>
+             <td>{{ tpl.unpatrolled }}</td>
+             <td>{{ tpl.ores_avg|round(3) }}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endblock content %}

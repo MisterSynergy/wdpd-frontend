@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% set active_page = "/creations" %}
+{% block content %}
+      <h2>Top 50 users with most unpatrolled item creations</h2>
+        <table class="data">
+          <thead>
+            <tr>
+              <th>user</th>
+              <th>unpatrolled new items</th>
+            </tr>
+          </thead>
+        <tbody>
+{% for tpl in data.itertuples() %}
+           <tr>
+             <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.username }}</a></td>
+             <td>{{ tpl.creations }}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endblock content %}

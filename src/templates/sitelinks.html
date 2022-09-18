@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% set active_page = "/sitelinks" %}
+{% block content %}
+      <h2>Patrol status by Wikimedia project</h2>
+      <p>This list provides the patrol status of sitelink modifications grouped by Wikimedia project. It considers additions, modifications, or removals of sitelinks as well as modifications due to moved pages on the corresponding Wikimedia project. It does not consider any sitelink changes that were made due to item mergers, reverts, or complex edits (<span class="selector">editentity</span>; this includes item creations).</p>
+      <p>You can use these tools to filter the recent changes table for a Wikimedia project code (except for changes resulting from page moves): <a href="https://pltools.toolforge.org/rech/" title="reCh by User:Pasleim" target="_blank">reCh</a>.</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Wikimedia project</th>
+            <th>unpatrolled</th>
+            <th>patrolled</th>
+            <th>total</th>
+            <th>progress</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in data.itertuples() %}
+          <tr>
+            <td>{{ tpl.rank|round }}</td>
+            <td>{{ tpl.project }}</td>
+            <td>{{ tpl.unpatrolled }}</td>
+            <td>{{ tpl.patrolled }}</td>
+            <td>{{ tpl.total }}</td>
+            <td><progress value="{{ tpl.progress }}" max="100">{{ tpl.progress }}%</progress></td>
+            <td>{% if tpl.unpatrolled > 0 %}<a href="/by_project/{{ tpl.project }}" title="patrol sitelink modifications for project '{{ tpl.project }}'" class="button">worklist</a>{% endif %}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endblock content %}

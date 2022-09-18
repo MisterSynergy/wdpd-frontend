@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% set active_page = "/editsummaries" %}
+{% block content %}
+      <h2>Magic edit summaries</h2>
+      <p>Almost all edits in the main namespace in Wikidata have a so-called “magic edit summary” that is added by the software based on the nature of the modification being made in the edit. This can be used to deduce the “edit action” from the edit summary.</p>
+      <p>As an example, <a href="https://www.wikidata.org/wiki/Special:Diff/1307588932" alt="Special:Diff/1307588932 at Wikidata">Special:Diff/1307588932</a> is being presented here: the raw edit summary reads <span class="tt">/* wbsetdescription-add:1|en */ 20th birthday of Wikipedia</span>, of which <span class="tt">wbsetdescription-add</span> is the “magic edit summary” that tells us that a description was added in the edit. There is furthermore information about the edited language (<span class="tt">en</span>) and the added text (<span class="tt">20th birthday of Wikipedia</span>) available in the edit summary. The Wikidata web UI display a somewhat prettified representation of the original edit summary as follows: <span class="tt">‎Added [en] description: 20th birthday of Wikipedia</span>.</p>
+      <p>In the case of very few exceptions, no “magic edit summary” is available. This is particularly the case for “undo” actions where the undoing editor can modify the pre-filled edit summary in the web interface. Some anti-vandalism tools also add custom unrecognizable edit summaries to undo actions. There is <a href="{{ url_for('uncategorizable') }}" title="List of edits with uncategorizable edit summaries">a report page</a> for these cases available in this tool.</p>
+      <h3>Groups of recognized “magic edit summary” actions by this tool</h3>
+      <p>Some of the graphs and tables in this tool group magic edit summaries according to the grouping as presented in this table. If so, the group is named as in the first column of this table.</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>group</th>
+            <th>actions in group</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in groups.itertuples() %}
+          <tr>
+            <td>{{ tpl.group_name }}</td>
+            <td>{{ tpl.group_members }}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+      <h3>Additional meta groups of recognized “magic edit summary” actions by this tool</h3>
+      <p>There are furthermore a couple of meta groups that either contain similar actions from the previous definitions, or all actions that are not in any of the groups above.</p>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>meta group</th>
+            <th>description</th>
+            <th>actions in meta group</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for tpl in meta_groups.itertuples() %}
+          <tr>
+            <td>{{ tpl.group_name }}</td>
+            <td>{{ tpl.explain|safe }}</td>
+            <td>{{ tpl.group_members }}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+{% endblock content %}
