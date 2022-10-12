@@ -23,7 +23,7 @@
         <tbody>
 {% for tpl in describe.itertuples() %}
           <tr>
-            <td>{{ tpl.parameter }}</a></td>
+            <td>{{ tpl.parameter }}</td>
             <td>{% if tpl.parameter == 'count' %} {{ tpl.value|round|int }} {% else %}{{ tpl.value_formatted }}{% endif %}</td>
           </tr>
 {% endfor %}
