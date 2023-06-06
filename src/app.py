@@ -46,6 +46,10 @@ def make_contributions_link(username:str) -> str:
     return f'https://www.wikidata.org/wiki/Special:Contributions/{quote_plus(username.replace(" ", "_"))}'
 
 
+def make_blocklog_link(username:str) -> str:
+    return f'https://www.wikidata.org/w/index.php?title=Special:Log/block&page=User%3A{quote_plus(username.replace(" ", "_"))}'
+
+
 def make_diff_link(rev_id:str) -> str:
     return f'https://www.wikidata.org/wiki/Special:Diff/{rev_id}'
 
@@ -517,6 +521,67 @@ def by_time(timeframe='today') -> str:
         timeframe=timeframe,
         data=data,
         description=descriptions.get(timeframe)
+    )
+
+
+@app.route('/block_history')
+@app.route('/block_history/<string:subset>')
+def block_history(subset:str='ip-all') -> str:
+    filenames = {
+        'ip-all' : 'anon-with-block-history-all',
+        'ip-1y' : 'anon-with-block-history-1y',
+        'reg-all' : 'registered-with-block-history-all',
+        'reg-1y' : 'registered-with-block-history-1y',
+    }
+    
+    if subset.startswith('ip'):
+        try:
+            data = pd.read_csv(
+                f'{DATA_DIR}worklist-users-{filenames.get(subset, "anon-with-block-history-all")}-full.tsv',
+                sep='\t',
+                skiprows=1,
+                usecols=[ 1, 2, 3, 4, 5, 6, 7 ],
+                names=[ 'actor_name', 'edits', 'block_cnt', 'range_blocks', 'total_blocks', 'is_blocked', 'is_range_blocked' ],
+                dtype={ 'actor_name' : str, 'edits' : int, 'block_cnt' : int, 'range_blocks' : int, 'total_blocks' : int, 'is_blocked' : str, 'is_range_blocked' : str },
+            )
+        except FileNotFoundError:
+            data = None
+        else:
+            data['contributions_link'] = data['actor_name'].apply(func=make_contributions_link)
+            data['blocklog_link'] = data['actor_name'].apply(func=make_blocklog_link)
+    elif subset.startswith('reg'):
+        try:
+            data = pd.read_csv(
+                f'{DATA_DIR}worklist-users-{filenames.get(subset)}-full.tsv',
+                sep='\t',
+                skiprows=1,
+                usecols=[ 1, 2, 3, 4 ],
+                names=[ 'actor_name', 'edits', 'block_cnt', 'is_blocked' ],
+                dtype={ 'actor_name' : str, 'edits' : int, 'block_cnt' : int, 'is_blocked' : str },
+            )
+        except FileNotFoundError:
+            data = None
+        else:
+            data['contributions_link'] = data['actor_name'].apply(func=make_contributions_link)
+            data['blocklog_link'] = data['actor_name'].apply(func=make_blocklog_link)
+    else:
+        data = None
+
+    data = data.fillna('')
+
+    descriptions = {
+        'reg-all' : 'registered users',
+        'reg-1y' : 'registered users (1 year)',
+        'ip-all' : 'IP users',
+        'ip-1y' : 'IP users (1 year)',
+    }
+
+    return render_template(
+        'blockhistory.html',
+        title='Users with an account block history',
+        subset=subset,
+        data=data,
+        description=descriptions.get(subset)
     )
 
 

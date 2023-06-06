@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% set active_page = "/block_history" %}
+{% block content %}
+      <table class="nav">
+        <tbody>
+          <tr>
+            <th>Select a subset:</th>
+{% for s in [ 'ip-all', 'ip-1y', 'reg-all', 'reg-1y' ] %}
+            <td><a href="{{ url_for('block_history', subset=s) }}" title="{{ s }}"{% if s==subset %} class="menu_active"{% endif %}>{{ s }}</a></td>
+{% endfor %}
+          </tr>
+        </tbody>
+      </table>
+      <h2>Users with block history: {{ description }}</h2>
+      <p>These are users with unpatrolled edit that have an account block history. These cases are best investigated in the Wikidata web user interface. For efficient patrolling, the <a href="https://www.wikidata.org/wiki/User:Mat%C4%9Bj_Such%C3%A1nek/patrolRevisions.js" title="patrolRevisions.js by User:Matěj Suchánek">patrolRevisions.js</a> user script can be used on user contribution pages.</p>
+      <table class="data">
+        <thead>
+          <tr>
+{% if subset=='ip-all' or subset=='ip-1y' %}
+            <th>user</th>
+            <th>unpatrolled edits</th>
+            <th>block count</th>
+            <th>range block count</th>
+            <th>total block count</th>
+            <th>currently blocked</th>
+            <th>currently range blocked</th>
+{% endif %}
+{% if subset=='reg-all' or subset=='reg-1y' %}
+            <th>user</th>
+            <th>unpatrolled edits</th>
+            <th>block count</th>
+            <th>currently blocked</th>
+{% endif %}
+          </tr>
+        </thead>
+        <tbody>
+{% if subset=='ip-all' or subset=='ip-1y' %}
+{% for tpl in data.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.actor_name }}</a></td>
+            <td>{{ tpl.edits }}</td>
+            <td>{{ tpl.block_cnt }}</td>
+            <td>{{ tpl.range_blocks }}</td>
+            <td><a href="{{ tpl.blocklog_link }}" target="_blank">{{ tpl.total_blocks }}</a></td>
+            <td>{{ tpl.is_blocked }}</td>
+            <td>{{ tpl.is_range_blocked }}</td>
+          </tr>
+{% endfor %}
+{% endif %}
+{% if subset=='reg-all' or subset=='reg-1y' %}
+{% for tpl in data.itertuples() %}
+          <tr>
+            <td><a href="{{ tpl.contributions_link }}" target="_blank">{{ tpl.actor_name }}</a></td>
+            <td>{{ tpl.edits }}</td>
+            <td><a href="{{ tpl.blocklog_link }}" target="_blank">{{ tpl.block_cnt }}</a></td>
+            <td>{{ tpl.is_blocked }}</td>
+          </tr>
+{% endfor %}
+{% endif %}
+        </tbody>
+      </table>
+{% endblock content %}
